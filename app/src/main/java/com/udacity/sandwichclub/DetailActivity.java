@@ -3,7 +3,9 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -43,7 +45,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.get()
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +58,23 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        TextView descriptionTV = findViewById(R.id.description_tv);
+        TextView alsoKnownAsTV = findViewById(R.id.also_known_tv);
+        TextView ingredientsTV = findViewById(R.id.ingredients_tv);
+        TextView originTV = findViewById(R.id.origin_tv);
 
+        // Separate items on their own line
+        String alsoKnownAs = TextUtils.join("\n- ", sandwich.getAlsoKnownAs());
+        String ingredients = TextUtils.join("\n- ", sandwich.getIngredients());
+
+        // Only show bullet symbol if more than 1 items
+        if (sandwich.getAlsoKnownAs().size() > 1) alsoKnownAs = "- ".concat(alsoKnownAs);
+        if (sandwich.getIngredients().size() > 1) ingredients = "- ".concat(ingredients);
+
+        descriptionTV.setText(sandwich.getDescription());
+        alsoKnownAsTV.setText(alsoKnownAs);
+        ingredientsTV.setText(ingredients);
+        originTV.setText(sandwich.getPlaceOfOrigin());
     }
 }
